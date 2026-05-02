@@ -1,0 +1,8 @@
+<IfModule mod_rewrite.c>
+    Options -Indexes
+    RewriteEngine On
+    RewriteRule ^(\.env|composer\.(json|lock)|package(-lock)?\.json|artisan|vite\.config\.js|vite\.frontend\.config\.js|phpunit\.xml|README\.md|DEPLOYMENT\.md)$ - [F,L]
+    RewriteRule ^(app|bootstrap|config|database|node_modules|resources|routes|storage|tests|vendor)(/|$) - [F,L]
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

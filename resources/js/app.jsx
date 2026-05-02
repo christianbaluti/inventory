@@ -4,9 +4,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Boxes, Building2, Check, LogOut, PackagePlus, Pencil, Plus, Save, Trash2 } from 'lucide-react';
 
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
+
 const api = async (path, options = {}) => {
     const token = localStorage.getItem('mgawi_token');
-    const response = await fetch(`/api${path}`, {
+    const response = await fetch(`${API_BASE_URL}/api${path}`, {
         ...options,
         headers: {
             Accept: 'application/json',
