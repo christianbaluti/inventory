@@ -4,21 +4,25 @@
     </IfModule>
 
     RewriteEngine On
+    SetEnvIfNoCase Origin "^https://inventory-lilac-alpha\.vercel\.app$" CORS_ORIGIN=$0
+    SetEnvIfNoCase Origin "^https://[a-z0-9-]+\.vercel\.app$" CORS_ORIGIN=$0
+    Header always set Access-Control-Allow-Origin "%{CORS_ORIGIN}e" env=CORS_ORIGIN
+    Header always set Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS" env=CORS_ORIGIN
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, Accept, Origin" env=CORS_ORIGIN
+    Header always set Vary "Origin" env=CORS_ORIGIN
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^ - [R=204,L]
 
-    # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Handle X-XSRF-Token Header
     RewriteCond %{HTTP:x-xsrf-token} .
     RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
 
-    # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
